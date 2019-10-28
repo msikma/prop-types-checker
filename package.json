@@ -1,0 +1,30 @@
+{
+  "name": "prop-types-checker",
+  "version": "1.0.0",
+  "description": "Runs React's PropTypes checker and returns results as object",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "files": [
+    "src/index.js",
+    "license.md",
+    "package-lock.json",
+    "package.json",
+    "readme.md"
+  ],
+  "keywords": [
+    "prop-types",
+    "validation"
+  ],
+  "homepage": "https://github.com/msikma/prop-types-checker",
+  "repository": "https://github.com/msikma/prop-types-checker",
+  "author": "Michiel Sikma <michiel@sikma.org>",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^24.9.0"
+  },
+  "dependencies": {
+    "lodash.isfunction": "^3.0.9"
+  }
+}
