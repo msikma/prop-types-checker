@@ -1,6 +1,6 @@
 // © 2019, MIT license
 
-const isFunction = require('lodash.isfunction')
+const { isFunction } = require('./util')
 
 // Secret string; normally you cannot call validators manually, so the React team built in
 // a password that you must pass to every validator call, or else it fails to work.

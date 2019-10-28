@@ -25,6 +25,6 @@
     "jest": "^24.9.0"
   },
   "dependencies": {
-    "lodash.isfunction": "^3.0.9"
+    "prop-types": "^15.7.2"
   }
 }
