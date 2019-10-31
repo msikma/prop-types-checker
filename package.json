@@ -8,6 +8,7 @@
   },
   "files": [
     "src/index.js",
+    "src/util.js",
     "license.md",
     "package-lock.json",
     "package.json",
