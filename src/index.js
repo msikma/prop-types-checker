@@ -5,9 +5,6 @@ const { isFunction } = require('./util')
 // Secret string; normally you cannot call validators manually, so the React team built in
 // a password that you must pass to every validator call, or else it fails to work.
 const ReactPropTypesSecret = require('prop-types/lib/ReactPropTypesSecret')
-// For consistency with the original PropTypes error reporting, we're borrowing its functions.
-const propTypesUtil = require('prop-types/factoryWithTypeCheckers')
-
 /**
  * Runs the PropTypes checker for a given spec and value object and returns errors.
  * 
@@ -25,9 +22,9 @@ const propTypesUtil = require('prop-types/factoryWithTypeCheckers')
  * regardless of environment.
  */
 const checkPropTypes = (propTypes, props, location = 'prop', componentName = 'Object') => {
-  const errors = _runTypeSpec(propTypes, values, location, componentName)
+  const errors = _runTypeSpec(propTypes, props, location, componentName)
   return {
-    success: errors.length === 0,
+    success: Object.keys(errors).length === 0,
     props,
     propTypes,
     errors
@@ -49,18 +46,20 @@ const _runTypeSpec = (typeSpec, values, location = 'prop', componentName = 'Obje
   Object.entries(typeSpec).reduce((propTypeErrors, [propName, propValidator]) => {
     let result
     let message
-    let isValidValidator = true
+    let isInvalidValidator = false
     let isException = false
 
     if (!isFunction(propValidator)) {
       // If the validator is not a function, return a report with type indicator.
-      message = `Prop \`${propName}\` is invalid; it must be a function, usually from the \`prop-types\` package, but received \`${propTypesUtil.getPreciseType(checker)}\`.`
-      isValidValidator = false
+      result = true
+      message = `Prop \`${propName}\` is invalid; it must be a function, usually from the \`prop-types\` package, but received \`${typeof propValidator}\`.`
+      isInvalidValidator = true
     }
     else {
       // Run the validator.
       try {
         result = propValidator(values, propName, componentName, location, null, ReactPropTypesSecret)
+        message = result && result.message
         if (!(result instanceof Error)) {
           message = `Type specification of prop \`${propName}\` is invalid; the type checker function must return \`null\` or an \`Error\` but returned a ${typeof result}. You may have forgotten to pass an argument to the type checker creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and shape all require an argument).`
         }
@@ -79,7 +78,7 @@ const _runTypeSpec = (typeSpec, values, location = 'prop', componentName = 'Obje
         ...propTypeErrors,
         [propName]: {
           error: message,
-          isValidValidator,
+          isInvalidValidator,
           isException
         }
       }
@@ -90,6 +89,4 @@ const _runTypeSpec = (typeSpec, values, location = 'prop', componentName = 'Obje
   }, {})
 )
 
-module.exports = {
-  checkPropTypes
-}
+module.exports = checkPropTypes
